@@ -1,0 +1,129 @@
+﻿<Window x:Class="StickerBoard.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StickerBoard"
+        mc:Ignorable="d"
+        Title="Sticker Board" Height="Auto" Width="Auto" SizeToContent="WidthAndHeight" ResizeMode="CanMinimize">
+
+    <Window.Resources>
+        <local:HexaColorConverter x:Key="HexaColorConverter"></local:HexaColorConverter>
+    </Window.Resources>
+    
+    <Window.DataContext>
+        <local:MainViewModel></local:MainViewModel>
+    </Window.DataContext>
+    
+    <Grid Background="WhiteSmoke">
+        <DockPanel>
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center">
+                <Button Content="Generate board" Margin="10 10" Padding="20 5" Command="{Binding Command_Generate}"></Button>
+            </StackPanel>
+            
+            <StackPanel>
+                <GroupBox Header="Stickers" Margin="5" Padding="5">
+                    <StackPanel Orientation="Horizontal">
+                        <ListBox Width="385" Height="200" ItemsSource="{Binding ImageFiles}" x:Name="ImageList" SelectionMode="Multiple"></ListBox>
+
+                        <StackPanel>
+                            <Button Content="+" Margin="5 0 0 5" Padding="10 3" Command="{Binding Command_AddFiles}"></Button>
+                            <Button Content="-" Margin="5 0 0 5" Padding="10 3" Command="{Binding Command_RemoveFiles}" CommandParameter="{Binding ElementName=ImageList, Mode=OneWay}"></Button>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox Header="Colors (#RRGGBB)" Margin="5 5" Padding="5">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Background" Width="100" Margin="0 0 10 0"></Label>
+                            <TextBox Width="120" VerticalContentAlignment="Center" Text="{Binding Background, Mode=TwoWay}"></TextBox>
+                            <Rectangle Width="25" Height="25" Fill="{Binding Background, Converter={StaticResource HexaColorConverter}}" Margin="10 0 0 0"></Rectangle>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
+                            <Label Content="Foreground" Width="100" Margin="0 0 10 0"></Label>
+                            <TextBox Width="120" VerticalContentAlignment="Center" Text="{Binding Foreground, Mode=TwoWay}"></TextBox>
+                            <Rectangle Width="25" Height="25" Fill="{Binding Foreground, Converter={StaticResource HexaColorConverter}}" Margin="10 0 0 0"></Rectangle>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+                    
+                <GroupBox Header="Margins" Margin="5 0 5 5" Padding="5" HorizontalAlignment="Stretch">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        
+                        <StackPanel Grid.Column="0">
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Top" Width="75"></Label>
+                                <TextBox Width="75" VerticalContentAlignment="Center" Margin="26 0 0 0" Text="{Binding MarginTop, Mode=TwoWay}"></TextBox>
+                                <Label Content="px" Margin="3 0 0 0"></Label>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
+                                <Label Content="Left" Width="75"></Label>
+                                <TextBox Width="75" VerticalContentAlignment="Center" Margin="26 0 0 0" Text="{Binding MarginLeft, Mode=TwoWay}"></TextBox>
+                                <Label Content="px" Margin="3 0 0 0"></Label>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1">
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Bottom" Width="75"></Label>
+                                <TextBox Width="75" VerticalContentAlignment="Center" Margin="26 0 0 0" Text="{Binding MarginBottom, Mode=TwoWay}"></TextBox>
+                                <Label Content="px" Margin="3 0 0 0"></Label>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
+                                <Label Content="Right" Width="75"></Label>
+                                <TextBox Width="75" VerticalContentAlignment="Center" Margin="26 0 0 0" Text="{Binding MarginRight, Mode=TwoWay}"></TextBox>
+                                <Label Content="px" Margin="3 0 0 0"></Label>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </GroupBox>
+
+                <GroupBox Header="Thumbnails per row" Margin="5 5" Padding="5">
+                    <StackPanel>
+                        <Slider Minimum="1" Maximum="99" TickFrequency="1" Value="{Binding ThumbnailPerRow, Mode=TwoWay}"></Slider>
+                        <Label Content="{Binding ThumbnailPerRow}" HorizontalAlignment="Center"></Label>
+                    </StackPanel>
+                </GroupBox>
+
+                <StackPanel Orientation="Horizontal">
+                    <GroupBox Header="Thumbnail size" Margin="5 5" Padding="5">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBox Width="100" VerticalContentAlignment="Center" Text="{Binding ThumbnailWidth, Mode=TwoWay}"></TextBox>
+                            <Label Content="x" Margin="3 0"></Label>
+                            <TextBox Width="100" VerticalContentAlignment="Center" Text="{Binding ThumbnailHeight, Mode=TwoWay}"></TextBox>
+                            <Label Content="px" Margin="3 0 0 0"></Label>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <GroupBox Header="Thumbnail spacings" Margin="5 5" Padding="5">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="H" Width="30" Margin="0 0 10 0"></Label>
+                                <TextBox Width="75" VerticalContentAlignment="Center" Text="{Binding ThumbnailHorizontalSpacing, Mode=TwoWay}"></TextBox>
+                                <Label Content="px" Margin="3 0 0 0"></Label>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
+                                <Label Content="V" Width="30" Margin="0 0 10 0"></Label>
+                                <TextBox Width="75" VerticalContentAlignment="Center" Text="{Binding ThumbnailVerticalSpacing, Mode=TwoWay}"></TextBox>
+                                <Label Content="px" Margin="3 0 0 0"></Label>
+                            </StackPanel>
+                        </StackPanel>
+                    </GroupBox>
+
+                </StackPanel>
+
+                <GroupBox Header="Image size" Margin="5 5" Padding="5">
+                    <Label Content="{Binding LabelSize}" HorizontalAlignment="Center"></Label>
+                </GroupBox>
+            </StackPanel>
+        </DockPanel>
+        
+    </Grid>
+</Window>
